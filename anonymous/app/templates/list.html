@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Messages</title>
+    <!-- Include Tailwind CSS from CDN for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add dark mode preference script -->
+    <script>
+        // Automatically switch to dark mode based on user preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<style>
+
+    * {
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+</style>
+
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-6 dark:bg-black dark:text-white">
+    <!-- Main container for the content -->
+    <div class="w-full max-w-2xl bg-gray-800 dark:bg-gray-900 shadow-lg rounded-lg p-8">
+        <!-- Anonymous image -->
+        <div class="flex justify-center mb-6">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeR-sUw-_3MPYww38XcEJsmNCTisfJWIS24Q&s" alt="Anonymous" class="w-24 h-24 rounded-full border-4 border-gray-700 shadow-lg">
+        </div>
+        
+        <!-- Display the username -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold mb-2">Welcome, {{ user.username }}</h1>
+            <p class="text-lg italic">"Unveil the secrets in the dark."</p>
+        </div>
+
+        <!-- Display the messages -->
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Your Secret Messages</h2>
+            <!-- Messages list -->
+            <ul class="space-y-6">
+                {% for messages in message %}
+                    <li class="bg-gray-700 dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-600">
+                        <div class="text-xl font-semibold text-indigo-300 mb-2">
+                            📜 "{{ messages.message }}"
+                        </div>
+                        <div class="text-sm text-gray-400">
+                            🕒 Sent on: {{ messages.created|date:"Y-m-d H:i" }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if not message %}
+                <p class="text-center text-gray-400 mt-6">No messages found. The silence is eerie... 👻</p>
+            {% endif %}
+
+        </div>
+        <a href="{% url 'home' %}" >Go back home 🚪</a>
+
+    </div>
+</body>
+
+</html>

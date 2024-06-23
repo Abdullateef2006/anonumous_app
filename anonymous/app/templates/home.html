@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Messages</title>
+    <!-- Include Tailwind CSS from CDN for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Add dark mode preference script -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Automatically switch to dark mode based on user preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<style>
+
+    * {
+        font-family: "Rajdhani", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+</style>
+
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center dark:bg-black dark:text-white">
+    <!-- Main container for the content -->
+    <div class="w-full max-w-4xl p-8">
+        <!-- Header -->
+        <header class="mb-12 text-center">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeR-sUw-_3MPYww38XcEJsmNCTisfJWIS24Q&s" alt="Anonymous" class="w-32 h-32 mx-auto rounded-full border-4 border-gray-700 shadow-lg mb-4">
+            <h1 class="text-4xl font-bold mb-2">Welcome to Secret Messages</h1>
+            <p class="text-lg italic text-gray-300">"Where secrets are shared in the shadows."</p>
+        </header>
+
+        <!-- Introduction Section -->
+      
+        <!-- User Actions Section -->
+        <section class="text-center">
+            <h2 class="text-2xl font-semibold mb-4">Get Started Now</h2>
+            <div class="flex flex-col items-center space-y-6">
+                {% if user.is_authenticated %}
+                    <div class="w-full md:w-2/3 p-6 bg-gray-800 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-bold mb-2">Your Secret Link</h3>
+                        <p class="mb-4">Share this link to receive anonymous messages:</p>
+                        <div class="flex justify-center items-center space-x-4">
+                            <input type="text" value="{{ request.scheme }}://{{ request.get_host }}/add/{{request.user.username}}" id="user-link" readonly
+                                   class="w-full p-2 border border-gray-600 rounded-lg text-gray-900 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-indigo-300">
+                            <button id="copy-button"
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                                Copy
+                            </button>
+                        </div>
+                        <p id="copy-success" class="text-center text-green-400 hidden mt-4">Link copied to clipboard! 🎉</p>
+                    </div>
+
+                    <a href="{% url 'list' %}">view your messages</a>
+                {% else %}
+                    <div class="w-full md:w-2/3 p-6 bg-gray-800 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-bold mb-2">Join Us</h3>
+                        <p class="mb-4">Sign up or log in to start sending and receiving secret messages.</p>
+                        <a href="/login" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                            Log In
+                        </a>
+                    </div>
+                {% endif %}
+
+                <a href="{% url 'logout' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">logout</a>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Add script for copy button functionality -->
+    <script>
+        document.getElementById('copy-button').addEventListener('click', function() {
+            var copyText = document.getElementById('user-link');
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            document.execCommand('copy');
+
+            var successMessage = document.getElementById('copy-success');
+            successMessage.classList.remove('hidden');
+        });
+    </script>
+</body>
+
+</html>
